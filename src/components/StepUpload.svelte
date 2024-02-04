@@ -32,9 +32,9 @@
 				return
 			}
 
-			const result = await res.json()
-			console.log(result)
-			setAppStatusChatMode()
+			const { id, url, pages } = await res.json()
+
+			setAppStatusChatMode({ id, url, pages })
 		}
 	}
 </script>
