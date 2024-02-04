@@ -1,11 +1,15 @@
 import type { APIRoute } from 'astro'
 import { v2 as cloudinary, type UploadApiResponse } from 'cloudinary'
+import fs from 'node:fs/promises'
+import path from 'node:path'
 
 cloudinary.config({
 	cloud_name: import.meta.env.CLOUD_NAME,
 	api_key: import.meta.env.API_KEY,
 	api_secret: import.meta.env.API_SECRET
 })
+
+const outputDir = path.join(process.cwd(), 'public/text')
 
 const uploadStream = async (
 	buffer: Uint8Array,
@@ -37,10 +41,26 @@ export const POST: APIRoute = async ({ request }) => {
 	const uint8Array = new Uint8Array(arrayBuffer)
 
 	const result = await uploadStream(uint8Array, {
-		folder: 'pdf'
+		folder: 'pdf',
+		ocr: 'adv_ocr' // OCR Text Detection and Extraction
 	})
 
-	const { asset_id: id, secure_url: url, pages } = result
+	const { asset_id: id, secure_url: url, pages, info } = result
+
+	const data = info?.ocr?.adv_ocr?.data
+
+	const extractedText = data
+		.map((blocks: { textAnnotations: { description: string }[] }) => {
+			const annotations = blocks['textAnnotations'] ?? {}
+			const first = annotations[0] ?? {}
+			const content = first['description'] ?? ''
+			return content.trim()
+		})
+		.filter(Boolean)
+		.join('\n')
+
+	// TODO: persist in a db
+	fs.writeFile(`${outputDir}/${id}.txt`, extractedText, 'utf-8')
 
 	return new Response(
 		JSON.stringify({

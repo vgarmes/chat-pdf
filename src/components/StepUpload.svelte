@@ -33,7 +33,6 @@
 			}
 
 			const { id, url, pages } = await res.json()
-
 			setAppStatusChatMode({ id, url, pages })
 		}
 	}
