@@ -66,3 +66,17 @@
 	<Input id="question" required placeholder="What is this document about?"
 	></Input>
 </form>
+
+{#if loading}
+	<div class="mt-10 flex justify-center items-center flex-col gap-y-2">
+		<Spinner />
+		<p class="opacity-75">Esperando respuesta...</p>
+	</div>
+{/if}
+
+{#if answer}
+	<div class="mt-8">
+		<p class="font-medium">Respuesta:</p>
+		<p>{answer}</p>
+	</div>
+{/if}

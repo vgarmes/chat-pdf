@@ -7,8 +7,16 @@ export const APP_STATUS = {
 	ERROR: 'ERROR'
 }
 
-export const appStatus = writable(APP_STATUS.INIT)
-export const appStatusInfo = writable({ id: '', url: '', pages: 0 })
+const initialPdf = {
+	id: '498fc4bd6249b8721d3fc9a132e50de5',
+	pages: 2,
+	url: 'https://res.cloudinary.com/dwhjuqfar/image/upload/v1707052849/pdf/ato5ryt8joasjfyxnfec.pdf'
+}
+
+const defaultPdf = { id: '', url: '', pages: 0 }
+
+export const appStatus = writable(APP_STATUS.CHAT_MODE)
+export const appStatusInfo = writable(initialPdf)
 
 export const setAppStatusLoading = () => appStatus.set(APP_STATUS.LOADING)
 
