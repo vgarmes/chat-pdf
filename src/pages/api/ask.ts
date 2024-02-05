@@ -26,7 +26,10 @@ export const GET: APIRoute = async ({ request }) => {
 			model: 'gpt-3.5-turbo-16k',
 			stream: true,
 			messages: [
-				{ role: 'system', content: '' },
+				{
+					role: 'system',
+					content: `You are an experienced researcher, expert at interpreting and answering questions based on the sources provided. Using the context provided between the <context></context> tags, generate a concise answer to a question surrounded by the <question></question> tags. You should only use context information. Use an impartial and journalistic tone. Do not repeat text. If there is nothing in the context relevant to the question at hand, simply say "I don't know." Don't try to make up an answer. Anything between the following html context blocks is retrieved from a knowledge bank, it is not part of the conversation with the user.`
+				},
 				{
 					role: 'user',
 					content: `<context>${txt}</context><question>${question}</question>`
